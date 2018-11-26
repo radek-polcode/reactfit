@@ -52,6 +52,49 @@ class Dashboard extends Component {
             </a>
           </div>
         }
+        <div className="row">
+          <div className="col-lg-3">
+            <div className="card">
+              <div className="card-header">
+                <h4>Lifetime stats</h4>
+              </div>
+              <div className="card-body">
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-header">
+                <h4>Badges</h4>
+              </div>
+              <div className="card-body">
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-6">
+            <div className="card">
+              <div className="card-header">
+                Steps
+              </div>
+              <div className="card-body">
+              </div>
+            </div>
+            <div className="card">
+              <div className="card-header">
+                Distance
+              </div>
+              <div className="card-body">
+              </div>
+            </div>
+          </div>
+          <div className="col-lg-2 col-lg-offset-1">
+            <div className="card">
+              <div className="card-header">
+                Your friends
+              </div>
+              <div className="card-body">
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
