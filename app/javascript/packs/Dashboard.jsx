@@ -2,13 +2,22 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
+import LifetimeStats from './LifetimeStats';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props)
     this.state = {
       user: {},
-      loggedIn: false
+      loggedIn: false,
+      lifetimeBest: {
+        steps: "",
+        distance: ""
+      },
+      lifetimeTotals:  {
+        steps: "",
+        distance: ""
+      },
     }
   }
 
@@ -34,7 +43,24 @@ class Dashboard extends Component {
       })
       .catch(error => console.log(error))
       this.setState({loggedIn: true})
-    }
+
+      axios({
+        method: 'get',
+        url: 'https://api.fitbit.com/1/user/-/activities.json',
+        headers: { 'Authorization': 'Bearer ' + fitbitToken },
+        mode: 'cors'
+      })
+      .then(response => {
+        console.log(response)
+        this.setState(
+          {
+            lifetimeBest: response.data.best.total,
+            lifetimeTotals: response.data.lifetime.total
+          }
+        )
+      })
+      .catch(error => console.log(error))
+    } 
   }
 
   render () {
@@ -54,13 +80,10 @@ class Dashboard extends Component {
         }
         <div className="row">
           <div className="col-lg-3">
-            <div className="card">
-              <div className="card-header">
-                <h4>Lifetime stats</h4>
-              </div>
-              <div className="card-body">
-              </div>
-            </div>
+            <LifetimeStats 
+              lifetimeTotals={this.state.lifetimeTotals}
+              lifetimeBest={this.state.lifetimeBest}
+            />
             <div className="card">
               <div className="card-header">
                 <h4>Badges</h4>
