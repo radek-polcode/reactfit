@@ -47,6 +47,12 @@ class Dashboard extends Component {
         fitbitToken,
         'lifetimeStats'
       )
+
+      this.fetchFitbitData(
+        'https://api.fitbit.com/1/user/-/badges.json',
+        fitbitToken,
+        'badges'
+      )
       
     } 
   }
