@@ -3,63 +3,51 @@ import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.css';
 import axios from 'axios';
 import LifetimeStats from './LifetimeStats';
+import dummyData from './dummyData';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-      user: {},
-      loggedIn: false,
-      lifetimeBest: {
-        steps: "",
-        distance: ""
-      },
-      lifetimeTotals:  {
-        steps: "",
-        distance: ""
-      },
-    }
+    this.state = dummyData;
+  }
+
+  fetchFitbitData (url, fitbitToken, stateKey,) {
+    axios({
+      method: 'get',
+      url: url,
+      headers: { 'Authorization': 'Bearer ' + fitbitToken },
+      mode: 'cors'
+    })
+    .then(response => {
+      console.log(response)
+      this.setState({
+        [stateKey]: response.data
+      })
+    })
+    .catch(error => console.log(error))
   }
 
   componentDidMount () {
     if(window.location.hash) {
       let fitbitToken = window.location.hash.slice(1).split("&")[0].replace("access_token=", "")
-      console.log(fitbitToken);
+      this.setState(
+        {
+          loggedIn: true
+        }
+      )
 
-      axios({
-        method: 'get',
-        url: 'https://api.fitbit.com/1/user/-/profile.json',
-        headers: { 'Authorization': 'Bearer ' + fitbitToken },
-        mode: 'cors'
-      })
-      .then(response => {
-        console.log(response)
-        this.setState(
-          {
-            user: response.data.user, 
-            loggedIn: true
-          }
-        )
-      })
-      .catch(error => console.log(error))
-      this.setState({loggedIn: true})
+      this.fetchFitbitData(
+        'https://api.fitbit.com/1/user/-/profile.json',
+        fitbitToken,
+        'user'
+      )
 
-      axios({
-        method: 'get',
-        url: 'https://api.fitbit.com/1/user/-/activities.json',
-        headers: { 'Authorization': 'Bearer ' + fitbitToken },
-        mode: 'cors'
-      })
-      .then(response => {
-        console.log(response)
-        this.setState(
-          {
-            lifetimeBest: response.data.best.total,
-            lifetimeTotals: response.data.lifetime.total
-          }
-        )
-      })
-      .catch(error => console.log(error))
+      this.fetchFitbitData(
+        'https://api.fitbit.com/1/user/-/activities.json',
+        fitbitToken,
+        'lifetimeStats'
+      )
+      
     } 
   }
 
@@ -81,8 +69,7 @@ class Dashboard extends Component {
         <div className="row">
           <div className="col-lg-3">
             <LifetimeStats 
-              lifetimeTotals={this.state.lifetimeTotals}
-              lifetimeBest={this.state.lifetimeBest}
+              lifetimeStats={this.state.lifetimeStats}
             />
             <div className="card">
               <div className="card-header">
