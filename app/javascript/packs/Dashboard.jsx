@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 import Badges from './Badges';
 import dummyData from './dummyData';
+import Friends from './Friends';
 import LifetimeStats from './LifetimeStats';
 import TimeSeriesBarChart from './TimeSeriesBarChart';
 
@@ -68,6 +69,12 @@ class Dashboard extends Component {
         fitbitToken,
         'distance'
       )
+
+      this.fetchFitbitData(
+        'https://api.fitbit.com/1/user/-/friends/leaderboard.json',
+        fitbitToken,
+        'friends'
+      )
       console.log(this.state.badges)
       
     } 
@@ -108,11 +115,6 @@ class Dashboard extends Component {
               title="Distance (km)"
               yMax={6}
             />
-            <div className="card">
-              <div className="card-header">
-                Distance
-              </div>
-            </div>
           </div>
           <div className="col-lg-2 col-lg-offset-1">
             <div className="card">
@@ -120,6 +122,7 @@ class Dashboard extends Component {
                 Your friends
               </div>
               <div className="card-body">
+                <Friends friends={this.state.friends.friends} />
               </div>
             </div>
           </div>
