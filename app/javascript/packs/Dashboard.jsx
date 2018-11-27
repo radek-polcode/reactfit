@@ -1,3 +1,4 @@
+import Badges from './Badges';
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.css';
@@ -53,6 +54,7 @@ class Dashboard extends Component {
         fitbitToken,
         'badges'
       )
+      console.log(this.state.badges)
       
     } 
   }
@@ -77,13 +79,9 @@ class Dashboard extends Component {
             <LifetimeStats 
               lifetimeStats={this.state.lifetimeStats}
             />
-            <div className="card">
-              <div className="card-header">
-                <h4>Badges</h4>
-              </div>
-              <div className="card-body">
-              </div>
-            </div>
+            <Badges 
+              badges={this.state.badges.badges}
+            />
           </div>
           <div className="col-lg-6">
             <div className="card">
