@@ -1,10 +1,12 @@
-import Badges from './Badges';
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import 'bootstrap/dist/css/bootstrap.css';
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import axios from 'axios';
-import LifetimeStats from './LifetimeStats';
+import 'bootstrap/dist/css/bootstrap.css';
+
+import Badges from './Badges';
 import dummyData from './dummyData';
+import LifetimeStats from './LifetimeStats';
+import TimeSeriesBarChart from './TimeSeriesBarChart';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -54,6 +56,18 @@ class Dashboard extends Component {
         fitbitToken,
         'badges'
       )
+
+      this.fetchFitbitData(
+        'https://api.fitbit.com/1/user/-/activities/steps/date/2018-11-30/1m.json',
+        fitbitToken,
+        'steps'
+      )
+
+      this.fetchFitbitData(
+        'https://api.fitbit.com/1/user/-/activities/distance/date/2018-11-30/1m.json',
+        fitbitToken,
+        'distance'
+      )
       console.log(this.state.badges)
       
     } 
@@ -84,18 +98,19 @@ class Dashboard extends Component {
             />
           </div>
           <div className="col-lg-6">
-            <div className="card">
-              <div className="card-header">
-                Steps
-              </div>
-              <div className="card-body">
-              </div>
-            </div>
+            <TimeSeriesBarChart 
+              data={this.state.steps["activities-steps"]}
+              title="Steps"
+              yMax={8000}
+            />
+            <TimeSeriesBarChart 
+              data={this.state.distance["activities-distance"]}
+              title="Distance (km)"
+              yMax={6}
+            />
             <div className="card">
               <div className="card-header">
                 Distance
-              </div>
-              <div className="card-body">
               </div>
             </div>
           </div>
